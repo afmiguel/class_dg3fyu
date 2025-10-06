@@ -3,12 +3,16 @@ use std::thread::sleep;
 use std::time::Duration;
 
 fn main() {
-    let t1 = thread::spawn(|| {
-        for i in 0..20 {
-            println!("\tI'm a new Thread! Count is {}", i);
-            sleep(Duration::from_secs(1));
-        }
-    });
+    let mut handles = vec![];
+    for i in 0..3{
+        let t1 = thread::spawn(|| {
+            for i in 0..20 {
+                println!("\tI'm a new Thread! Count is {}", i);
+                sleep(Duration::from_secs(1));
+            }
+        });
+        handles.push(t1);
+    }
 
     for i in 0..10 {
         println!("I'm the main Thread! Count is {}", i);
@@ -19,4 +23,3 @@ fn main() {
     println!(">> It's waiting for the new Thread to finish.");
     t1.join().unwrap();
 }
-/// Teste

@@ -21,5 +21,7 @@ fn main() {
 
     println!(">> Main Thread is done!");
     println!(">> It's waiting for the new Thread to finish.");
-    t1.join().unwrap();
+    for h in handles{
+        h.join().unwrap();
+    }
 }

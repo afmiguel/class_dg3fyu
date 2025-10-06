@@ -1,11 +1,13 @@
 use std::time::{Duration, Instant};
 mod download;
 use download::download_file;
+use std::thread;
 
 const URL: &str = "https://royalcast.com.br/files";
 
-
 fn main() {
+    let mut handles =  vec![];
+
     let filename_list = vec![
         "arquivo_1.jpg",
         "arquivo_2.jpg",
@@ -20,7 +22,13 @@ fn main() {
 
     let start = Instant::now();
     for filename in filename_list {
-        download_file(URL, filename);
+        let h = thread::spawn(||{
+            download_file(URL, filename);
+        });
+        handles.push(h);
+    }
+    for h in handles{
+        h.join().unwrap();
     }
     let duration: Duration = start.elapsed();
     println!(

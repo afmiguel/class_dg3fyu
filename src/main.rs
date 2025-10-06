@@ -4,11 +4,11 @@ use std::time::Duration;
 
 fn main() {
     let mut handles = vec![];
-    for i in 0..3{
-        let t1 = thread::spawn(|| {
+    for thread_number in 0..3{
+        let t1 = thread::spawn(move || {
             for i in 0..20 {
-                println!("\tI'm a new Thread! Count is {}", i);
-                sleep(Duration::from_secs(1));
+                println!("\tI'm a new Thread {thread_number}! Count is {}", i);
+                sleep(Duration::from_millis(700));
             }
         });
         handles.push(t1);

@@ -1,27 +1,31 @@
-use std::thread;
-use std::thread::sleep;
-use std::time::Duration;
+use std::time::{Duration, Instant};
+mod download;
+use download::download_file;
+
+const URL: &str = "https://royalcast.com.br/files";
+
 
 fn main() {
-    let mut handles = vec![];
-    for thread_number in 0..3{
-        let t1 = thread::spawn(move || {
-            for i in 0..20 {
-                println!("\tI'm a new Thread {thread_number}! Count is {}", i);
-                sleep(Duration::from_millis(700));
-            }
-        });
-        handles.push(t1);
-    }
+    let filename_list = vec![
+        "arquivo_1.jpg",
+        "arquivo_2.jpg",
+        "arquivo_3.jpg",
+        "arquivo_4.jpg",
+        "arquivo_5.jpg",
+        "arquivo_6.jpg",
+        "arquivo_7.jpg",
+        "arquivo_8.jpg",
+        "arquivo_9.jpg",
+    ];
 
-    for i in 0..10 {
-        println!("I'm the main Thread! Count is {}", i);
-        sleep(Duration::from_secs(1));
+    let start = Instant::now();
+    for filename in filename_list {
+        download_file(URL, filename);
     }
-
-    println!(">> Main Thread is done!");
-    println!(">> It's waiting for the new Thread to finish.");
-    for h in handles{
-        h.join().unwrap();
-    }
+    let duration: Duration = start.elapsed();
+    println!(
+        "Downloaded files in {:.1} seconds",
+        duration.as_millis() as f32 / 1000.
+    );
 }
+
